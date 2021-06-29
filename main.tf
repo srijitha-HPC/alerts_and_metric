@@ -1,7 +1,21 @@
+resource "google_monitoring_notification_channel" "notification_channel" {
+  count        = "${length(var.notification_email_addresses)}"
+  project      = "${var.project}"
+  enabled      = true
+  display_name = "Send email to ${element(var.notification_email_addresses, count.index)}"
+  type         = "email"
+
+  labels = {
+    email_address = "${element(var.notification_email_addresses, count.index)}"
+  }
+}
+
+
 resource "google_monitoring_alert_policy" "alert_policy" {
   display_name = var.display_name
   combiner     = var.alert_combiner
-  notification_channels = var.notification_channels
+  notification_channels = "${google_monitoring_notification_channel.notification_channel.*.name}"
+  
   
   conditions   {
     display_name = "Alert on cpu utilization"
@@ -25,7 +39,7 @@ resource "google_monitoring_alert_policy" "alert_policy" {
 
   conditions   {
     display_name = "Alert for used disk space for filestore"
-    
+        
     condition_threshold  {
       filter          = "metric.type=\"file.googleapis.com/nfs/server/used_bytes_percent\" AND resource.type=\"filestore_instance\""
       

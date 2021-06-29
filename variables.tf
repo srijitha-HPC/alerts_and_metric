@@ -1,7 +1,13 @@
+variable "project" {
+  type        = string
+  description = "The display name"
+  default = "hpc-lab-316407"
+}
+
 variable "display_name" {
   type        = string
   description = "The display name"
-  default = "CPU utilization and filestore999675"
+  default = "CPU utilization and filestore1010101"
 }
 
 variable "alert_combiner" {
@@ -37,10 +43,9 @@ variable "trigger_count" {
 
 
 
-variable "notification_channels" {
-  type = list
-  description = "List of email ids"
-  default =["projects/hpc-lab-316407/notificationChannels/9612192781086906899",
-            "projects/hpc-lab-316407/notificationChannels/617403293521240308",
-            "projects/hpc-lab-316407/notificationChannels/1664761978761983337"]
+variable "notification_email_addresses" {
+  description = "The email for notifications"
+  type   = list(string)
+  default = ["srijitha999@gmail.com",
+            "srijitha.s@hcl.com"]
 }
